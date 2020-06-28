@@ -10,7 +10,7 @@ from .auth.auth import AuthError, requires_auth
 
 app = Flask(__name__)
 setup_db(app)
-CORS(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 '''
 @TODO uncomment the following line to initialize the datbase
@@ -80,8 +80,7 @@ def create_drink(token):
             "success": True,
             "drinks": [drink.long()]
         })
-    except:
-        print(sys.exc_info())
+    except Exception as e:
         abort(422)
 
 
@@ -119,8 +118,7 @@ def update_drink(token, drink_id):
             "success": True,
             "drinks": [drink.long()]
         })
-    except:
-        print(sys.exc_info())
+    except Exception as e:
         abort(422)
 
 
@@ -147,7 +145,7 @@ def delete_drink(token, drink_id):
             "success": True,
             "delete": drink_id
         })
-    except:
+    except Exception as e:
         abort(422)
 
 
