@@ -69,17 +69,77 @@ The `--reload` flag will detect file changes and restart the server automaticall
         - can `get:drinks-detail`
     - Manager
         - can perform all actions
-7. Test your endpoints with [Postman](https://getpostman.com). 
-    - Register 2 users - assign the Barista role to one and Manager role to the other.
-    - Sign into each account and make note of the JWT.
-    - Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`
-    - Right-clicking the collection folder for barista and manager, navigate to the authorization tab, and including the JWT in the token field (you should have noted these JWTs).
-    - Run the collection and correct any errors.
-    - Export the collection overwriting the one we've included so that we have your proper JWTs during review!
 
-### Implement The Server
+## API Reference
 
-There are `@TODO` comments throughout the `./backend/src`. We recommend tackling the files in order and from top to bottom:
+### Getting Started
+- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
 
-1. `./src/auth/auth.py`
-2. `./src/api.py`
+### Error Handling
+Errors are returned as JSON objects in the following format:
+```
+{
+    "success": False, 
+    "error": 404,
+    "message": "resource not found"
+}
+```
+The API will return six error types when requests fail:
+- 400: Bad Request
+- 401: Unathurize User 
+- 403: Insufficient Permission
+- 404: Resource Not Found
+- 409: Conflict
+- 422: Not Processable
+
+### Endpoints 
+
+#### GET /drinks
+- General:
+    - Returns a list of drinks with limited info, success value
+    - It is a public
+- Sample: `curl http://127.0.0.1:5000/drinks`
+
+```
+```
+
+#### GET /drinks-detail
+- General:
+    - Returns a list of drinks, success value
+    - It accessed only by user with permission 'get:drinks-detail'
+- Sample: `curl http://127.0.0.1:5000/drinks-detail`
+
+```
+```
+
+#### POST /drinks
+- General:
+    - Including a body that contains title, recipe
+    - Title should be unique
+    - Recipe should in dictionary format which contains name, color, amd parts
+    - Returns a list that contains only the new drink added and success value
+    - It accessed only by user with permission 'post:drinks'
+- Sample: `curl http://127.0.0.1:5000/drinks -X POST -H "Content-Type: application/json" -d '{ "id": -1, "recipe": [{ "color": "#cdf4fe", "name": "Blue Foam", "parts": 2 }, { "color": "#02b3e4", "name": "Blue Berry", "parts": 3 }], "title": "Udaci-Spice Latte" }'`
+
+```
+```
+
+#### PATCH /drinks/<int:drink_id>
+- General:
+    - Including a body that contains optional title and recipe that needed to be updated
+    - Title should be unique
+    - Recipe should in dictionary format which contains name, color, amd parts
+    - Returns a list that contains only the updated drink and success value
+    - It accessed only by user with permission 'patch:drinks'
+- Sample: `curl http://127.0.0.1:5000/drinks/1 -X PATCH -H "Content-Type: application/json" -d '{"title": "Udaci-Spice Latte" }'`
+
+```
+```
+
+#### DELETE /drinks/<int:drink_id>
+- General:
+    - Returns a deleted drink id and success value
+- Sample: `curl http://127.0.0.1:5000/drinks/1 -X DELETE`
+
+```
+```

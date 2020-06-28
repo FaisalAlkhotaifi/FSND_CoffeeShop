@@ -9,20 +9,23 @@ AUTH0_DOMAIN = 'falkhotaifi.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'caffeaShopService'
 
-## AuthError Exception
+# AuthError Exception
+
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
-## Getting Bearer token from request header
+# Getting Bearer token from request header
 def get_token_auth_header():
     headers = request.headers
     auth_key_header = 'Authorization'
@@ -30,7 +33,7 @@ def get_token_auth_header():
 
     if auth_key_header not in headers:
         abort(401)
-    
+
     header_auth = headers[auth_key_header]
     auth_parts = header_auth.split(' ')
 
@@ -42,9 +45,11 @@ def get_token_auth_header():
     return auth_parts[1]
 
 '''
-Validate user permission obtain from payload 
+Validate user permission obtain from payload
 that meets endpoint permission
 '''
+
+
 def check_permissions(permission, payload):
     permission_key = 'permissions'
 
@@ -52,13 +57,14 @@ def check_permissions(permission, payload):
         abort(400)
 
     if permission not in payload[permission_key]:
-        abort(403)
+        abort(401)
 
     return True
 
-## To extract payload from JWT token
+
+# To extract payload from JWT token
 def verify_decode_jwt(token):
-    ## CREDIT to udacity FULL STACK COURSE tutorial
+    # CREDIT to udacity FULL STACK COURSE tutorial
     jsonUrl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonUrl.read())
 
@@ -96,10 +102,17 @@ def verify_decode_jwt(token):
             }, 401)
 
         except jwt.JWTClaimsError:
-            print("error: Incorrect claims. Please, check the audience and issuer.")
+            print(
+                "error: Incorrect claims. ",
+                "Please, check the audience and issuer."
+            )
+
+            error_desc = 'Incorrect claims.'
+            error_suggestion = 'Please, check the audience and issuer.'
+
             raise AuthError({
                 'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer.'
+                'description': f'{error_desc} {error_suggestion}'
             }, 401)
         except Exception:
             print("error: Unable to parse authentication token.")
@@ -116,13 +129,15 @@ def verify_decode_jwt(token):
 
     raise Exception('Not Implemented')
 
+
 def get_payload(token):
     try:
         return verify_decode_jwt(token)
     except:
         abort(401)
 
-## Check auth decorator for end points
+
+# Check auth decorator for end points
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)

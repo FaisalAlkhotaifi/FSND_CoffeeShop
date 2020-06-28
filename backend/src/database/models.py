@@ -47,8 +47,14 @@ class Drink(db.Model):
         short form representation of the Drink model
     '''
     def short(self):
-        print(json.loads(self.recipe))
-        short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe)]
+        jsonRecipe = json.loads(self.recipe)
+        
+        short_recipe = []
+        if type(jsonRecipe) is list:
+            short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in jsonRecipe]
+        else:
+            short_recipe = [{'color': jsonRecipe['color'], 'parts': jsonRecipe['parts']}]
+        
         return {
             'id': self.id,
             'title': self.title,
@@ -60,10 +66,23 @@ class Drink(db.Model):
         long form representation of the Drink model
     '''
     def long(self):
+        jsonRecipe = json.loads(self.recipe)
+        
+        '''
+        Forcing return recipe data to be all LIST
+            - Checking if the recipe load from databse is in list type then use it
+            - else convert to list
+        '''
+        long_recipe = []
+        if type(jsonRecipe) is list:
+            long_recipe = jsonRecipe
+        else:
+            long_recipe = [jsonRecipe]
+
         return {
             'id': self.id,
             'title': self.title,
-            'recipe': json.loads(self.recipe)
+            'recipe': long_recipe
         }
 
     '''
