@@ -100,8 +100,6 @@ The API will return six error types when requests fail:
     - It is a public
 - Sample: `curl http://127.0.0.1:5000/drinks`
 
-```
-```
 
 #### GET /drinks-detail
 - General:
@@ -109,8 +107,6 @@ The API will return six error types when requests fail:
     - It accessed only by user with permission 'get:drinks-detail'
 - Sample: `curl http://127.0.0.1:5000/drinks-detail`
 
-```
-```
 
 #### POST /drinks
 - General:
@@ -121,8 +117,6 @@ The API will return six error types when requests fail:
     - It accessed only by user with permission 'post:drinks'
 - Sample: `curl http://127.0.0.1:5000/drinks -X POST -H "Content-Type: application/json" -d '{ "id": -1, "recipe": [{ "color": "#cdf4fe", "name": "Blue Foam", "parts": 2 }, { "color": "#02b3e4", "name": "Blue Berry", "parts": 3 }], "title": "Udaci-Spice Latte" }'`
 
-```
-```
 
 #### PATCH /drinks/<int:drink_id>
 - General:
@@ -133,13 +127,8 @@ The API will return six error types when requests fail:
     - It accessed only by user with permission 'patch:drinks'
 - Sample: `curl http://127.0.0.1:5000/drinks/1 -X PATCH -H "Content-Type: application/json" -d '{"title": "Udaci-Spice Latte" }'`
 
-```
-```
 
 #### DELETE /drinks/<int:drink_id>
 - General:
     - Returns a deleted drink id and success value
 - Sample: `curl http://127.0.0.1:5000/drinks/1 -X DELETE`
-
-```
-```
